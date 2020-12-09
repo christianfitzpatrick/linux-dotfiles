@@ -1,0 +1,21 @@
+set keymap vi
+set editing-mode vi
+set keyseq-timeout 0
+set enable-bracketed-paste
+
+# --------
+$if mode=vi
+
+set keymap vi-command
+# these are for vi-command mode
+Control-l: clear-screen
+
+set keymap vi-insert
+# these are for vi-insert mode
+Control-l: clear-screen
+$endif
+# --------
+
+set show-all-if-ambiguous on
+set completion-ignore-case on
+set colored-stats on
