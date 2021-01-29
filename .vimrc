@@ -1,7 +1,14 @@
 runtime! debian.vim
 
-" for when I accidentally do :W instead of :w
+" for when I accidentally do :W instead of :w or :Q instead of :q
 command W w
+command Q q
+
+" persistent undo
+set undofile                " Save undos after file closes
+set undodir=$HOME/.vim/undo " where to save undo histories
+set undolevels=1000         " How many undos
+set undoreload=10000        " number of lines to save for undo
 
 " Colors
 set background=dark
@@ -10,6 +17,7 @@ set t_Co=256
 set termguicolors
 let g:gruvbox_guisp_fallback = "bg"
 colorscheme gruvbox
+autocmd BufEnter * :syntax sync fromstart
 
 set cursorline
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
@@ -20,9 +28,15 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
+set splitbelow
+
 " Jump to start and end of line using the home row keys
 map H ^
 map L $
+
+" nicer for jumping through search results
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
 filetype plugin indent on
 
@@ -76,6 +90,7 @@ map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+set fillchars=vert:│
 
 " Plugins
 	call plug#begin('~/.vim/autoload')
@@ -92,33 +107,22 @@ map <C-l> <C-W>l
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'wlangstroth/vim-racket'
     Plug 'vim-syntastic/syntastic'
-    " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-    " Plug 'junegunn/fzf.vim'
+    Plug 'preservim/tagbar'
+    Plug 'jlapolla/vim-coq-plugin'
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'junegunn/fzf.vim'
+    Plug 'coreyja/fzf.devicon.vim'
+    Plug 'ap/vim-buftabline'
+    Plug 'Yggdroot/indentLine'
+    Plug 'rust-lang/rust.vim'
 	call plug#end()
 
 
 let g:lightline = {}
 
-
-" function! MyFiletype()
-" return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-" endfunction
-
-" function! MyFileformat()
-" return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-" endfunction
-
 function! MyLineinfo()
   return line('.') . '/' . line('$')
 endfunction
-
-" let g:lightline = {
-    " \ 'component_function': {
-    " \   'filetype': 'MyFiletype',
-    " \   'fileformat': 'MyFileformat',
-    " \   'lineinfo': 'MyLineinfo',
-    " \ }
-    " \ }
 
 let g:lightline = {
     \ 'component_function': {
@@ -143,6 +147,8 @@ let g:lightline.colorscheme = 'gruvbox'
     " Add spaces after comment delimiters by default
     " (fixes issue with Haskell guards)
     let g:NERDSpaceDelims = 1
+    let g:NERDCommentEmptyLines = 1
+    let g:NERDDefaultAlign = 'left'
 
     " Enable trimming of trailing whitespace when uncommenting
     let g:NERDTrimTrailingWhitespace = 1
@@ -176,58 +182,8 @@ let g:lightline.colorscheme = 'gruvbox'
 	let NERDTreeMinimalUI = 1
 	let NERDTreeDirArrows = 1
 
-
-" -------------------------------------------
-" ---------------- Statusline ---------------
-" -------------------------------------------
-" Default for status line
-" hi statusline ctermfg=green ctermbg=white
-
-" Status line custom
-" let g:currentmode={
-    " \ 'n'  : 'Normal',
-    " \ 'no' : 'Normal·Operator Pending',
-    " \ 'v'  : 'Visual',
-    " \ 'V'  : 'V·Line',
-    " \ '^V' : 'V·Block',
-    " \ 's'  : 'Select',
-    " \ 'S'  : 'S·Line',
-    " \ '^S' : 'S·Block',
-    " \ 'i'  : 'Insert',
-    " \ 'R'  : 'Replace',
-    " \ 'Rv' : 'V·Replace',
-    " \ 'c'  : 'Command',
-    " \ 'cv' : 'Vim Ex',
-    " \ 'ce' : 'Ex',
-    " \ 'r'  : 'Prompt',
-    " \ 'rm' : 'More',
-    " \ 'r?' : 'Confirm',
-    " \ '!'  : 'Shell',
-    " \ 't'  : 'Terminal'
-    " \}
-
 set laststatus=2
 set noshowmode
-" set statusline=
-" set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\  " The current mode
-" set statusline+=%1*\ %<%f%m%r%h%w\                       " File path, modified, readonly, helpfile, preview
-" set statusline+=%3*│                                     " Separator
-" set statusline+=%2*\ %Y\                                 " FileType
-" set statusline+=%3*│                                     " Separator
-" set statusline+=%=                                       " Right Side
-" set statusline+=%2*\ col:\ %02v\                         " Colomn number
-" set statusline+=%1*\ ln:\ %l/%L\                         " Line number / total lines, percentage of document
-" set statusline+=%0*\ %{toupper(g:currentmode[mode()])}\  " The current mode
-
-" hi User1 ctermfg=007 ctermbg=239 guibg=#4e4e4e guifg=#adadad
-" hi User2 ctermfg=007 ctermbg=236 guibg=#303030 guifg=#adadad
-" hi User3 ctermfg=236 ctermbg=236 guibg=#303030 guifg=#303030
-" hi User4 ctermfg=239 ctermbg=239 guibg=#4e4e4e guifg=#4e4e4e
-" ----------------------------------------------
-" ---------------- End Statusline --------------
-" ----------------------------------------------
-
-
 
 " Handles the delay switching modes
 set timeoutlen=1000 ttimeoutlen=0
@@ -333,6 +289,9 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
+" TODO: come up with way to use splits to go to definition only if it's in a different file....
+"NOTE: this is the default
+" nnoremap gd :call CocAction('jumpDefinition', 'split')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -424,28 +383,17 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-
-
-
-
-
-
-
-autocmd BufEnter * :syntax sync fromstart
-
-
+" Syntastic Settings
 let g:syntastic_cpp_checkers = ['cpplint']
 let g:syntastic_c_checkers = ['cpplint']
 let g:syntastic_cpp_cpplint_exec = 'cpplint'
-" let g:syntastic_cpp_cpplint_exec = 'cpplint --filter=-whitespace,-legal/copyright'
-
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
-
+let g:syntastic_enable_racket_racket_checker = 1
 
 function! ToggleSyntastic()
     for i in range(1, winnr('$'))
@@ -459,3 +407,39 @@ function! ToggleSyntastic()
 endfunction
 
 nnoremap <F8> :call ToggleSyntastic()<CR>
+nnoremap <F7> :SyntasticToggleMode<CR>
+
+" augroup AutoSaveFolds
+"   autocmd!
+"   autocmd BufWinLeave * mkview
+"   autocmd BufWinEnter * silent loadview
+" augroup END
+
+
+nnoremap <F9> :TagbarToggle<CR>
+highlight TagbarSignature guifg=Yellow ctermfg=Yellow
+let g:tagbar_compact = 2
+let g:tagbar_autofocus = 1
+
+" nnoremap <C-t> :FZF<CR>
+nnoremap <C-t> :Files<CR>
+nnoremap <C-f> :Rg<CR>
+
+let g:buftabline_show=1
+
+nnoremap <C-n> :bn<CR>
+nnoremap <C-b> :bp<CR>
+nnoremap <leader>x :bd<CR>
+nnoremap t :enew<CR>
+
+let $BAT_THEME='gruvbox'
+
+let g:indentLine_char = '▏'
+
+
+" move text blocks
+nnoremap _ :m .-2<CR>==
+nnoremap + :m .+1<CR>==
+
+vnoremap _ :m '<-2<CR>gv=gv
+vnoremap + :m '>+1<CR>gv=gv
