@@ -1,4 +1,11 @@
 {
+
+    "diagnostic.errorSign": "✘",
+    "diagnostic.warningSign": "⚠️",
+
+    "python.pythonPath": "/usr/bin/python3.8",
+    "python.linting.enabled": true,
+
     "coc.source.around.firstMatch": false,
     "coc.source.buffer.firstMatch": false,
 
@@ -29,6 +36,13 @@
               "command": "haskell-language-server-wrapper",
               "args": ["--lsp"],
               "filetypes": ["haskell", "lhaskell"]
+            },
+
+            "racket": {
+                "command": "racket-langserver",
+                "filetypes": [
+                    "rkt"
+                ]
             }
     }
 }

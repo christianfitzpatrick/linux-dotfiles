@@ -3,6 +3,11 @@ set editing-mode vi
 set keyseq-timeout 0
 set enable-bracketed-paste
 
+# everything below this is experimental
+# set show-mode-in-prompt on
+# set vi-ins-mode-string ""
+# set vi-cmd-mode-string "(CMD) "
+
 # --------
 $if mode=vi
 

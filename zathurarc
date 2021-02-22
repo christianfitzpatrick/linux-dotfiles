@@ -11,6 +11,9 @@ map f toggle_fullscreen
 map [fullscreen] f toggle_fullscreen
 map p print
 
+" Open another instance of the same file
+map c feedkeys ":exec zathura --fork $FILE<Return>"
+
 " Colors
 set default-bg "#282828"
 set recolor "true"

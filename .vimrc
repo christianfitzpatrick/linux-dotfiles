@@ -115,6 +115,7 @@ set fillchars=vert:│
     Plug 'ap/vim-buftabline'
     Plug 'Yggdroot/indentLine'
     Plug 'rust-lang/rust.vim'
+    Plug 'jpalardy/vim-slime'
 	call plug#end()
 
 
@@ -292,6 +293,7 @@ nmap <silent> gd <Plug>(coc-definition)
 " TODO: come up with way to use splits to go to definition only if it's in a different file....
 "NOTE: this is the default
 " nnoremap gd :call CocAction('jumpDefinition', 'split')<CR>
+nnoremap gd :call CocAction('jumpDefinition')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -388,6 +390,9 @@ let g:syntastic_cpp_checkers = ['cpplint']
 let g:syntastic_c_checkers = ['cpplint']
 let g:syntastic_cpp_cpplint_exec = 'cpplint'
 
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_pylint_exe = 'python3.8 -m pylint'
+
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
@@ -395,7 +400,27 @@ let g:syntastic_check_on_wq = 0
 
 let g:syntastic_enable_racket_racket_checker = 1
 
+let g:syntastic_warning_symbol = '⚠️'
+let g:syntastic_error_symbol = '✘'
+
+" function! ToggleSyntastic()
+"     for i in range(1, winnr('$'))
+"         let bnum = winbufnr(i)
+"         if getbufvar(bnum, '&buftype') == 'quickfix'
+"             lclose
+"             return
+"         endif
+"     endfor
+"     SyntasticCheck
+" endfunction
+
+
+" NOTE: this will use CocDiagnostics for Haskell, but syntastic otherwise
 function! ToggleSyntastic()
+    if &ft == 'haskell'
+        CocDiagnostics
+        return
+    endif
     for i in range(1, winnr('$'))
         let bnum = winbufnr(i)
         if getbufvar(bnum, '&buftype') == 'quickfix'
@@ -443,3 +468,36 @@ nnoremap + :m .+1<CR>==
 
 vnoremap _ :m '<-2<CR>gv=gv
 vnoremap + :m '>+1<CR>gv=gv
+
+" diable capslock in normal mode
+" Execute 'lnoremap x X' and 'lnoremap X x' for each letter a-z.
+" for c in range(char2nr('A'), char2nr('Z'))
+"   execute 'lnoremap ' . nr2char(c+32) . ' ' . nr2char(c)
+"   execute 'lnoremap ' . nr2char(c) . ' ' . nr2char(c+32)
+" endfor
+
+" Kill the capslock when leaving insert mode
+" autocmd InsertLeave * set iminsert=0
+
+nmap <F1> :echo<CR>
+imap <F1> <C-o>:echo<CR>
+
+
+" I don't wanna read a ton of GitHub issues for the Coc Python interpreter, so...
+" (this is super janky)
+" autocmd BufNewFile,BufRead *.py :CocCommand python.setInterpreter
+" autocmd FileType python :CocCommand python.setInterpreter
+
+nnoremap <leader>r :%s/\<<C-r>=expand('<cword>')<CR>\>/
+
+" TODO: if not alreadying running a REPL, start that first
+let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.2"}
+
+
+" yank everything and force quit
+nmap <leader>yq gg0vG$"+y:q!<CR>
+
+
+
+" let g:coc_global_extensions = ['coc-solargraph']
