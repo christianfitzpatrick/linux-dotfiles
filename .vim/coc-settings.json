@@ -3,7 +3,7 @@
     "diagnostic.errorSign": "✘",
     "diagnostic.warningSign": "⚠️",
 
-    "python.pythonPath": "/usr/bin/python3.8",
+    "python.pythonPath": "/home/christian/.pyenv/versions/3.9.2/bin/python",
     "python.linting.enabled": true,
 
     "coc.source.around.firstMatch": false,
@@ -28,7 +28,9 @@
             "initializationOptions": {
                 "cache": {
                     "directory": "/tmp/ccls"
-                }
+                },
+                "highlight": { "lsRanges" : true }
+
             }
         },
 
@@ -44,5 +46,10 @@
                     "rkt"
                 ]
             }
-    }
+
+    },
+    "python.linting.pylintEnabled": true,
+    "javascript.suggestionActions.enabled": false
+
+
 }

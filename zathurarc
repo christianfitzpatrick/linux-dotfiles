@@ -47,3 +47,6 @@ set statusbar-fg                "#ebdbb2"
 
 set highlight-color             "#ebdbb2"
 set highlight-active-color      "#458588"
+
+" Faster scrolling
+set scroll-step 200

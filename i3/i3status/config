@@ -10,25 +10,14 @@ order += "tztime local"
 
 volume master {
         format = "  %volume"
-        format_muted = "VOL muted"
+        format_muted = "MUTED"
         device = "default"
         mixer = "Master"
         mixer_idx = 0
 }
 
-read_file BRIGHTNESS {
-        format = "BRI %content%"
-        path = "/home/user_name/.config/brightness"
-        max_characters = 5
-}
-
-cpu_usage {
-        format= "CPU %usage <%cpu0 %cpu1>"
-        max_threshold= 75
-}
-
 wireless _first_ {
-        format_up = " "
+        format_up = "  %ip"
         format_down = ""
 }
 
@@ -41,27 +30,14 @@ battery all {
         format = "%status %percentage"
         format_down = ""
         status_chr = ""
-        status_bat = ""
+        status_bat = " "
         status_unk = "?"
         status_full = "FULL"
         path = "/sys/class/power_supply/BAT%d/uevent"
         low_threshold = 10
+        last_full_capacity = true
 }
 
 tztime local {
     format = "%a %b %d %-l:%M %p"
-}
-
-load {
-        format = "%1min %5min %15min"
-}
-
-memory {
-        format = "MEM %percentage_used"
-        threshold_degraded = "10%"
-        format_degraded = "MEMORY: %free"
-}
-
-disk "/" {
-        format = "HDD %percentage_used"
 }
