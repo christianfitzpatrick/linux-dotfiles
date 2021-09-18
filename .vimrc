@@ -148,56 +148,28 @@ set fillchars=vert:│
     Plug 'preservim/nerdtree' |
             \ Plug 'Xuyuanp/nerdtree-git-plugin' |
             \ Plug 'ryanoasis/vim-devicons'
-
-
-	" Plug 'scrooloose/nerdtree'
-    " Plug 'Xuyuanp/nerdtree-git-plugin'
-	" Plug 'junegunn/goyo.vim'
-	" Plug 'neovimhaskell/haskell-vim'
 	Plug 'tpope/vim-markdown'
 	Plug 'preservim/nerdcommenter'
 	Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-	" Plug 'ryanoasis/vim-devicons'
-
     Plug 'bfrg/vim-cpp-modern'
-    " Plug 'jackguo380/vim-lsp-cxx-highlight'
-
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    " Plug 'wlangstroth/vim-racket'
     Plug 'dense-analysis/ale'
-    " Plug 'vim-syntastic/syntastic'
     Plug 'preservim/tagbar'
-    " Plug 'jlapolla/vim-coq-plugin'
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'coreyja/fzf.devicon.vim'
     Plug 'ap/vim-buftabline'
     Plug 'Yggdroot/indentLine'
     Plug 'rust-lang/rust.vim'
-    " Plug 'jpalardy/vim-slime'
     Plug 'pangloss/vim-javascript'
     Plug 'cpiger/NeoDebug'
     Plug 'machakann/vim-highlightedyank'
     Plug 'voldikss/vim-floaterm'
     Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
-    " Plug 'tpope/vim-surround'
     Plug 'fatih/vim-go'
-    " Plug 'frazrepo/vim-rainbow'
-    " Plug 'sago35/tinygo.vim'
-
     Plug 'unblevable/quick-scope'
     Plug 'tpope/vim-fugitive'
     Plug 'jaxbot/semantic-highlight.vim'
-
-    if has("nvim")
-        Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-        " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-
-        " Plug 'https://github.com/numirias/semshi'
-        " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-
-    endif
-
 	call plug#end()
 
 " Jump between .c* and .h* files with leader+h
@@ -206,10 +178,6 @@ map <leader>h :call CurtineIncSw()<CR>
 
 " Statusline config
 let g:lightline = {}
-"
-" function! MyLineinfo()
-"   return line('.') . '/' . line('$')
-" endfunction
 
 function! MyLineinfo()
   return line('.') . '/' . line('$') . ' :: ' . col('.')
@@ -231,14 +199,6 @@ function! GitInfo()
     " Don't show git info if not in a git repo
     return fugitive#head() == '' ? '' : ' ' . FugitiveHead()
 endfunction
-
-" let g:lightline = {
-"     \ 'component_function': {
-"     \   'lineinfo': 'MyLineinfo',
-"     \ }
-"     \ }
-"
-" TODO: integrate coc-status
 
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
@@ -283,9 +243,6 @@ let g:lightline.colorscheme = 'gruvbox'
 	" Toggle NerdTree with <F6>
 	nnoremap <silent> <expr> <F6> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
 
-	" Start NerdTree automatically
-    " autocmd VimEnter * NERDTree
-
 	" Start Vim in the editor, not the file explorer
     autocmd VimEnter * wincmd p
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -304,8 +261,6 @@ let g:lightline.colorscheme = 'gruvbox'
 
 	" NERDTree syntax highlighting settings
     let g:WebDevIconsDisableDefaultFolderSymbolColorFromNERDTreeDir = 1
-	" let g:WebDevIconsDisableDefaultFileSymbolColorFromNERDTreeFile = 1
-	" let g:NERDTreeLimitedSyntax = 1
 
 	" NerdTree visual customizations
 	let NERDTreeMinimalUI = 1
@@ -318,11 +273,6 @@ let g:lightline.colorscheme = 'gruvbox'
 
     let g:WebDevIconsDefaultFolderSymbolColor = s:darkOrange " sets the color for folders that did not match any rule
     let g:WebDevIconsDefaultFileSymbolColor = s:orange " sets the color for files that did not match any rule
-
-    " let g:NERDTreeFileExtensionHighlightFullName = 1
-    " let g:NERDTreeExactMatchHighlightFullName = 1
-    " let g:NERDTreePatternMatchHighlightFullName = 1
-
 
 set laststatus=2
 set noshowmode
@@ -367,14 +317,14 @@ set timeoutlen=1000 ttimeoutlen=0
 
     autocmd Filetype haskell setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
-" ------ coc settings -------
-
+" Clipboard things
 " Allow copy to the system clipboard
 map <C-c> "+y
 
 " Copy all text to clipboard
 nnoremap <F5> :%y+<CR>
 
+" ------ coc settings -------
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -432,9 +382,6 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
-" TODO: come up with way to use splits to go to definition only if it's in a different file....
-"NOTE: this is the default
-" nnoremap gd :call CocAction('jumpDefinition', 'split')<CR>
 nnoremap gd :call CocAction('jumpDefinition')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -527,24 +474,6 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-" Syntastic Settings
-let g:syntastic_cpp_checkers = ['cpplint']
-let g:syntastic_c_checkers = ['cpplint']
-let g:syntastic_cpp_cpplint_exec = 'cpplint'
-
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_pylint_exe = 'python3.9 -m pylint'
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_enable_racket_racket_checker = 1
-
-let g:syntastic_warning_symbol = '⚠️'
-let g:syntastic_error_symbol = '✘'
-
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠️'
 
@@ -557,57 +486,12 @@ let g:ale_fixers = {
 
 let g:ale_linters = { 'go': ['gofmt', 'golint', 'go vet', 'gopls'] }
 
-
-" let g:ale_linters = {
-"             \ 'go': ['gopls'],
-"             \}
-
-" function! ToggleSyntastic()
-"     for i in range(1, winnr('$'))
-"         let bnum = winbufnr(i)
-"         if getbufvar(bnum, '&buftype') == 'quickfix'
-"             lclose
-"             return
-"         endif
-"     endfor
-"     SyntasticCheck
-" endfunction
-
-
-" NOTE: this will use CocDiagnostics for Haskell, but syntastic otherwise
-" function! ToggleSyntastic()
-"     if &ft == 'haskell'
-"         CocDiagnostics
-"         return
-"     endif
-"     for i in range(1, winnr('$'))
-"         let bnum = winbufnr(i)
-"         if getbufvar(bnum, '&buftype') == 'quickfix'
-"             lclose
-"             return
-"         endif
-"     endfor
-"     SyntasticCheck
-" endfunction
-
-nnoremap <F8> :call ToggleSyntastic()<CR>
-nnoremap <F7> :SyntasticToggleMode<CR>
-
-" augroup AutoSaveFolds
-"   autocmd!
-"   autocmd BufWinLeave * mkview
-"   autocmd BufWinEnter * silent loadview
-" augroup END
-
-
 nnoremap <F9> :TagbarToggle<CR>
 highlight TagbarSignature guifg=Yellow ctermfg=Yellow
 let g:tagbar_compact = 2
 let g:tagbar_autofocus = 1
 
-" nnoremap <C-t> :FZF<CR>
 nnoremap <expr> <C-t> fugitive#head() != '' ? ':GitFilesWithDevicons<CR>' : ':Files<CR>'
-" nnoremap <C-t> :Files<CR>
 nnoremap <C-f> :Rg<CR>
 
 let g:buftabline_show=1
@@ -621,8 +505,6 @@ let $BAT_THEME='gruvbox'
 
 let g:indentLine_char = '▏'
 
-
-
 " move text blocks
 nnoremap _ :m .-2<CR>==
 nnoremap + :m .+1<CR>==
@@ -630,38 +512,14 @@ nnoremap + :m .+1<CR>==
 vnoremap _ :m '<-2<CR>gv=gv
 vnoremap + :m '>+1<CR>gv=gv
 
-" diable capslock in normal mode
-" Execute 'lnoremap x X' and 'lnoremap X x' for each letter a-z.
-" for c in range(char2nr('A'), char2nr('Z'))
-"   execute 'lnoremap ' . nr2char(c+32) . ' ' . nr2char(c)
-"   execute 'lnoremap ' . nr2char(c) . ' ' . nr2char(c+32)
-" endfor
 
-" Kill the capslock when leaving insert mode
-" autocmd InsertLeave * set iminsert=0
-
-" nmap <F1> :echo<CR>
 imap <F1> <C-o>:echo<CR>
 nmap <F1> :FloatermNew<CR>
 
-" I don't wanna read a ton of GitHub issues for the Coc Python interpreter, so...
-" (this is super janky)
-" autocmd BufNewFile,BufRead *.py :CocCommand python.setInterpreter
-" autocmd FileType python :CocCommand python.setInterpreter
-
 nnoremap <leader>r :%s/\<<C-r>=expand('<cword>')<CR>\>/
-
-" TODO: if not alreadying running a REPL, start that first
-" let g:slime_target = "tmux"
-" let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_pane": ":.2"}
-
 
 " yank everything and force quit
 nmap <leader>yq gg0vG$"+y:q!<CR>
-
-
-
-" let g:coc_global_extensions = ['coc-solargraph']
 
 let g:coc_disable_startup_warning = 1
 
@@ -677,28 +535,14 @@ let g:LanguageClient_serverCommands = {
 \ 'rust': ['rust-analyzer'],
 \ }
 
-" let g:rustfmt_autosave = 1
-
-" nnoremap <F2> :call term zsh -c "cd %:p:h && gcc % && ./a.out"<CR>
-" term zsh -c "cd %:p:h && g++ % && ./a.out"
-
-
-
-" Better display for messages
-" set cmdheight=2
-
-
-" set list lcs=trail:·,tab:»·
 
 let g:floaterm_autoclose = 2
-
-" let g:buftabline_indicators='on'
-" let g:buftabline_indicators='modified'
 
 let g:doge_python_settings = {
 \  'single_quotes': 1
 \}
 
+let g:doge_doc_standard_c = 'kernel_doc'
 
 " coc-nvim does want this to work so I'll just override it I guess
 autocmd Filetype go map <buffer> <leader>f m`:%!gofmt<cr>``
@@ -712,27 +556,16 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_variable_declarations = 1
 let g:go_highlight_variable_assignments = 1
-
-
-
-" let g:go_highlight_function_parameters = 1
 let g:go_highlight_operators = 1
 let g:go_def_mapping_enabled = 0
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 let g:go_fmt_autosave = 0
 let g:go_fmt_command = "gofmt"
-" let g:go_imports_autosave = 0
 
 let g:buftabline_indicators=1
 
-
-
-
 autocmd BufNewFile *.html 0r ~/.vim/templates/html.skel
-" let g:rainbow_active = 1
-
-
 
 " Trigger a highlight only when pressing f and F.
 let g:qs_highlight_on_keys = ['f', 'F']
@@ -745,11 +578,6 @@ let g:cpp_member_highlight = 1
 " somewhere in here, so I should probably figure that out
 " Disable automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-
-let g:doge_doc_standard_c = 'kernel_doc'
-
-
 
 " List errors
 nmap <leader>e :CocDiagnostics<CR>

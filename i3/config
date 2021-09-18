@@ -9,7 +9,6 @@ font pango:monospace 8
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
-# focus_follows_mouse no
 
 # start a terminal
 bindsym $mod+Return exec --no-startup-id i3-sensible-terminal
@@ -17,7 +16,6 @@ bindsym $mod+Return exec --no-startup-id i3-sensible-terminal
 # launch browser window
 bindsym $mod+b exec --no-startup-id brave-browser
 bindsym $mod+Shift+b exec --no-startup-id brave-browser --incognito
-# bindsym $mod+Shift+b exec --no-startup-id firefox-esr
 
 # launch nautilus (always in floating mode)
 bindcode $mod+49 exec --no-startup-id nautilus
@@ -26,19 +24,11 @@ for_window [class="Nautilus"] floating enable,resize set 450px 450px
 # start a terminal with tmux
 bindsym $mod+shift+Return exec --no-startup-id i3-sensible-terminal -e "tmux new"
 
-# launch a floating instance of Vim
-# bindsym $mod+v exec xterm -e "vim -u ~/.vimrc_alt ~/Documents/scratch"
-# bindsym $mod+t exec xterm
-# for_window [class="XTerm"] floating enable
-
 # kill focused window
 bindsym $mod+q kill
 
 # start dmenu-desktop
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -nb "#1d2021" -sb "#98971a"  -fn 'DejaVuSansMono-12' -p "λ"'
-# bindsym $mod+space exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -nb "#1d2021" -sb "#98971a"  -fn 'DejaVuSansMono-14' -p "λ"'
 bindsym $mod+space exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -nb "#1d2021" -sb "#98971a"  -fn 'DejaVuSansMono-14' -p ""'
-
 
 # create a new workspace with lowest possible number
 bindsym $mod+n exec --no-startup-id ~/.config/i3/i3_new_workspace.sh
@@ -72,15 +62,10 @@ bindsym $mod+Tab workspace next
 bindcode $mod+Shift+110 workspace back_and_forth
 bindsym $mod+Shift+Tab workspace prev
 
-# split in horizontal orientation
-# bindsym $mod+Shift+h split h
-
 # split in vertical orientation
 bindsym $mod+Shift+v split v
 
-# change container layout (stacked, tabbed, toggle split)
-# TODO: remap to something else; I literally never use these
-# bindsym $mod+s layout stacking
+# change container layout
 bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -94,11 +79,18 @@ bindsym $mod+f focus mode_toggle
 bindsym $mod+a focus parent
 
 bindsym $mod+F1 exec --no-startup-id mangl
-
 bindsym $mod+w exec --no-startup-id slack
 bindsym $mod+s exec --no-startup-id gnome-control-center
-
 bindsym $mod+shift+n exec --no-startup-id notion-snap
+bindsym Print exec --no-startup-id flameshot gui
+bindsym $mod+o exec --no-startup-id obsidian
+bindsym $mod+shift+s exec --no-startup-id gnome-control-center
+bindsym $mod+shift+m exec --no-startup-id /home/christian/.config/i3/i3_spotify_nav.sh
+
+for_window [class="Gnome-control-center"] floating enable
+for_window [title="^mangl$"] floating enable border pixel 5
+for_window [title="- mangl$"] floating enable border pixel 5
+
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -125,8 +117,10 @@ bindsym $mod+Shift+0 move container to workspace 10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
+
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
+
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -137,7 +131,7 @@ bindcode 122 exec "pactl set-sink-volume @DEFAULT_SINK@ -5%"
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
-        # prefix with fix for larger magnitude
+        # prefix with shift for greater effect
         bindsym h resize shrink width 10 px or 10 ppt
         bindsym j resize grow height 10 px or 10 ppt
         bindsym k resize shrink height 10 px or 10 ppt
@@ -162,7 +156,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # move floating windows with keys
-# prefix with fix for larger magnitude
+# prefix with shift for greater effect
 bindsym $mod+m mode "move" focus floating
 mode "move" {
     bindsym $mod+Tab focus right
@@ -187,7 +181,7 @@ mode "move" {
     bindsym Escape mode "default"
 }
 
-# set primary gruvbox colorscheme colors
+# set colorscheme
 set $bg #282828
 set $red #cc241d
 set $green #98971a
@@ -200,31 +194,25 @@ set $darkgray #1d2021
 
 
 bar {
-
         font pango:Sauce Code Pro Nerd Font 11
-
         status_command i3status
-
         mode hide
         hidden_state hide
 
         colors {
-        # bar background color
-        background $bg
-        # text color used for blocks that do not have a color specified.
-        statusline $yellow
-        # statusline $green
-        # workspaces section
-        #                    border  backgr. text
-        focused_workspace    $green $green $darkgray
-        inactive_workspace   $darkgray $darkgray $yellow
-        active_workspace     $darkgray $darkgray $yellow
-        urgent_workspace     $red $red $bg
+            # bar background color
+            background $bg
+
+            # text color used for blocks that do not have a color specified.
+            statusline $yellow
+            focused_workspace    $green $green $darkgray
+            inactive_workspace   $darkgray $darkgray $yellow
+            active_workspace     $darkgray $darkgray $yellow
+            urgent_workspace     $red $red $bg
     }
 }
 # no border if only window in workspace
 hide_edge_borders smart
-# client.focused          $green $green $green $green $green
 client.focused          $green $green $darkgray $green $green
 
 for_window [class="^.*"] border pixel 2
@@ -232,42 +220,16 @@ for_window [class="^.*"] border pixel 2
 # startup programs
 exec_always --no-startup-id feh --bg-scale ~/Pictures/green.jpg
 exec_always --no-startup-id sxhkd &
-# exec_always --no-startup-id xrandr --output VGA-1 --mode 1920x1080 --pos 0x0 --rotate normal --output LVDS-1 --primary --mode 1600x900 --pos 1920x180 --rotate normal --output HDMI-3 --off --output HDMI-2 --off --output HDMI-1 --off --output DP-3 --off --output DP-2 --off --output DP-1 --off
-# exec_always --no-startup-id xrandr --output DP-1 --off --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --output eDP-1 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI-2 --off
-# exec --no-startup-id i3-battery-popup -l 90
-
-# for locking screen
-# exec --no-startup-id xss-lock -- ~/.config/i3/lock.sh
 
 # for watching fullscreen videos in floating mode
 bindsym $mod+y fullscreen disable; floating enable; resize set 640 480; sticky enable; move window to position 1270 590
 bindsym $mod+Shift+y fullscreen disable; floating disable; sticky disable
 
+bindcode $mod+21 fullscreen toggle
 
-bindsym Print exec --no-startup-id flameshot gui
-
-
-for_window [title="^mangl$"] floating enable border pixel 5
-for_window [title="- mangl$"] floating enable border pixel 5
-
-bindsym $mod+shift+s exec --no-startup-id gnome-control-center
-for_window [class="Gnome-control-center"] floating enable
-for_window [class="Gnome-sudoku"] floating enable
-
-# exec --no-startup-id xset dpms 0 5 0
-
+# Lock screen
 bindsym $mod+Escape exec i3lock -c 000000 && systemctl suspend
 
-# for_window [class="Arandr"] floating enable border pixel 6
+# Configuring displays
 bindsym $mod+shift+a exec arandr
 exec_always --no-startup-id xrandr --output HDMI-1 --set "Broadcast RGB" "Full"
-
-
-bindsym $mod+shift+m exec --no-startup-id /home/christian/.config/i3/i3_spotify_nav.sh
-
-
-bindcode $mod+21 fullscreen toggle
-# bindsym $mod+y fullscreen disable; floating enable; resize set 640 480; sticky enable; move window to position 1270 590
-
-
-bindsym $mod+o exec --no-startup-id obsidian
